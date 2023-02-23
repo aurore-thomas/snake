@@ -17,6 +17,7 @@ class Colors :
 class Fonts :
     pygame.init()
     TITLE_FONT = pygame.font.Font('fonts/Blomberg.otf', 90)
+    TITLE_2_FONT = pygame.font.Font('fonts/Blomberg.otf', 70)
     BUTTON_FONT = pygame.font.Font('fonts/Blomberg.otf', 50)
     NORMAL_FONT = pygame.font.Font('fonts/Blomberg.otf', 45)
 
@@ -28,3 +29,4 @@ class Values:
     FPS = 60
     CELL_SIZE = 30
     CELL_NUMBER = 20
+    SPEED_GAME = 20
