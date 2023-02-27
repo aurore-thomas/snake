@@ -27,6 +27,6 @@ class Fonts :
 class Values:
     SIZE = (1100, 654)
     FPS = 60
-    CELL_SIZE = 30
-    CELL_NUMBER = 20
+    CELL_SIZE = 20
+    CELL_NUMBER = 30
     SPEED_GAME = 10
