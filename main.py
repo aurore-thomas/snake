@@ -43,12 +43,6 @@ def button(text, x, y, w, h, ic, ac, action=None):
 
 
 # ------------------------------------
-#              SCORES PAGE
-# ------------------------------------
-def scores():
-    pass
-
-# ------------------------------------
 #           INPUT USERNAME
 # ------------------------------------
 def window_game():
@@ -107,7 +101,7 @@ def window_game():
         # clock.tick(Values.FPS)
 
 # ------------------------------------
-#           INPUT USERNAME
+#            GAME ITSELF
 # ------------------------------------
     
 def play(username):
@@ -129,16 +123,20 @@ def play(username):
 
     # Initial position in the middle of the game surface :
     snake_position = [320, 309] 
+    snake = [[320, 309],
+             [320 + Values.CELL_SIZE, 309],
+             [320 + Values.CELL_SIZE * 2, 309],
+             [320 + Values.CELL_SIZE * 3, 309]]
+    
     direction = "west" # Initial move
 
     # Fruits : 
-    fruit_apparition = [random.randrange(50, 630), random.randrange(37, 617) ]
+    fruit_apparition = [random.randrange(40, 640), random.randrange(27, 627) ]
     fruit_is_present = True
 
     while running:
-        snake = [ [snake_position[0], snake_position[1]], 
-                [snake_position[0], snake_position[1]],
-                [snake_position[0], snake_position[1]] ]
+        # print("Fruit : ", fruit_apparition)
+        # print("Snake :", snake_position)
 
         # Display elements :
         game_surface = pygame.draw.rect(win, Colors.BLACK, pygame.Rect(40, 27, Values.CELL_SIZE * Values.CELL_NUMBER, Values.CELL_SIZE * Values.CELL_NUMBER))
@@ -151,16 +149,28 @@ def play(username):
                 pygame.quit()
                 sys.exit()
 
-            # To change direction :
+            # To change direction (about-turn impossible)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    direction = "north"
+                    if direction == "south":
+                        pass
+                    else:
+                        direction = "north"
                 elif event.key == pygame.K_DOWN:
-                    direction = "south"
+                    if direction == "north":
+                        pass
+                    else:
+                        direction = "south"
                 elif event.key == pygame.K_RIGHT:
-                    direction = "east"
+                    if direction == "west":
+                        pass
+                    else:
+                        direction = "east"
                 elif event.key == pygame.K_LEFT:
-                    direction = "west"
+                    if direction == "east":
+                        pass
+                    else:
+                        direction = "west"
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -175,36 +185,46 @@ def play(username):
         elif direction == "west":
             snake_position[0] -= Values.CELL_SIZE
 
-
-        if snake_position[0] < 39 or snake_position[0]>= 619:
+        # Game over when :
+        if snake_position[0] < 40 or snake_position[0]> 640:
             print("game over")
             endgame(username, score)
-        elif snake_position[1] <= 28 or snake_position[1] >= 606:
+        elif snake_position[1] < 27 or snake_position[1] > 627:
             print("game over")
             endgame(username, score)
+        for element in snake[1:]:
+            if snake_position[0] == element[0] and snake_position[1] == element[1]:
+                endgame(username, score)
 
-        # Display the fruit : 
-        pygame.draw.rect(win, Colors.GREEN_1, pygame.Rect(fruit_apparition[0], fruit_apparition[1], 20, 20))
+        # To make the snake moves and keep its lenght (otherwise it will decrease and create a bug in the game)
+        snake.insert(0, list(snake_position)) 
 
         # When the snake eats the fruit :
-        snake.insert(0, list(snake_position)) 
-        if snake_position[0] == fruit_apparition[0] and snake_position[1] == fruit_apparition[1]:
+        # I created a margin because the game is nearly impossible without. I made a lot of test, these margins are
+        # the most appropriate.
+        if ((snake_position[0] - 20 <= fruit_apparition[0] and snake_position[0] + 20 >= fruit_apparition[0]) 
+            and (snake_position[1] - 20 <= fruit_apparition[1] and snake_position[1] + 20 >= fruit_apparition[1])):
             score += 20
             print("win")
-            
             fruit_is_present = False
-        # else:
-        #     snake.pop()
-
+        else:
+            # To make the serpent move we also need this :
+            snake.pop()
 
         # If no fruit on the board : 
         if fruit_is_present == False:
-            fruit_apparition = [random.randrange(50, 630), random.randrange(37, 617) ]
+            fruit_apparition = [random.randrange(40, 640), random.randrange(27, 627) ]
+            while fruit_apparition == snake:
+                fruit_apparition = [random.randrange(40, 640), random.randrange(27, 627) ]
 
+            fruit_is_present = True
+        
         # Display the snake : 
-        # snake.insert(0, list(snake_position))
         for element in snake:
             pygame.draw.rect(win, Colors.YELLOW_2, pygame.Rect(element[0], element[1], Values.CELL_SIZE, Values.CELL_SIZE))
+
+        # Display the fruit : 
+        pygame.draw.rect(win, Colors.GREEN_1, pygame.Rect(fruit_apparition[0], fruit_apparition[1], Values.CELL_SIZE, Values.CELL_SIZE))
 
         pygame.display.update()
         clock.tick(Values.SPEED_GAME)
@@ -250,6 +270,12 @@ def endgame(username, score):
                     sys.exit()
         
         pygame.display.update()
+
+# ------------------------------------
+#              SCORES PAGE
+# ------------------------------------
+def scores():
+    pass
 
 
 # ------------------------------------
