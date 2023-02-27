@@ -29,4 +29,4 @@ class Values:
     FPS = 60
     CELL_SIZE = 30
     CELL_NUMBER = 20
-    SPEED_GAME = 20
+    SPEED_GAME = 10
