@@ -95,10 +95,8 @@ def window_game():
                 else:
                     username += event.unicode # To write with the keyboard
 
-        
-
         pygame.display.update()
-        # clock.tick(Values.FPS)
+
 
 # ------------------------------------
 #            GAME ITSELF
@@ -134,7 +132,6 @@ def play(username):
     fruit_is_present = True
 
     while running:
-
         # Display elements :
         game_surface = pygame.draw.rect(win, Colors.BLACK, pygame.Rect(40, 27, Values.CELL_SIZE * Values.CELL_NUMBER, Values.CELL_SIZE * Values.CELL_NUMBER))
         button("FINISH", 770, 450, 200, 70, Colors.ORANGE_2, Colors.ORANGE_1)
@@ -206,14 +203,6 @@ def play(username):
         # If no fruit on the board : 
         if fruit_is_present == False:
             fruit_apparition = [random.randrange(60, 620), random.randrange(47, 607) ]
-        # for element in snake:
-        #     while fruit_apparition[0] == snake[element][0]:
-        #         fruit_apparition = [random.randrange(60, 620), random.randrange(47, 607) ]
-
-
-            # while fruit_apparition == snake:
-            #     fruit_apparition = [random.randrange(60, 620), random.randrange(47, 607) ]
-
             fruit_is_present = True
 
         # Game over when :
@@ -224,7 +213,6 @@ def play(username):
         for element in snake[1:]: # If the snake bites itself
             if snake_position[0] == element[0] and snake_position[1] == element[1]:
                 endgame(username, score)
-    
 
         pygame.display.update()
         clock.tick(Values.SPEED_GAME)
@@ -332,22 +320,21 @@ def scores():
 
     for line in range(0, len(list_score)):
         list_score[line] = list_score[line].split(" ")
-        # list[line][1] = int(list[line][1])
 
-
-    list_score.sort(reverse = True)
-    print(list_score)
+    # We sort the list in descending order : 
+    list_score.sort(key=lambda x: int(x[1]), reverse = True)
+    # print(list_score)
 
     for i in range(0, 4):
+        order = str(i + 1)
+        win.blit(Fonts.NORMAL_FONT.render(order, True, Colors.BLACK), (300, 300 + (i*45)))
         win.blit(Fonts.NORMAL_FONT.render(list_score[i][0], True, Colors.BLACK), (350, 300 + (i*45)))
-        win.blit(Fonts.NORMAL_FONT.render(list_score[i][1], True, Colors.BLACK), (500, 300 + (i*45)))
+        win.blit(Fonts.NORMAL_FONT.render(list_score[i][1], True, Colors.BLACK), (700, 300 + (i*45)))
 
 
     while running:
-        # Buttons : (we have to draw them in the loop because of the hover)
-        # button("PLAY", 450, 300, 200, 70, Colors.ORANGE_2, Colors.ORANGE_1, window_game)
-        # button("SCORES", 450, 400, 200, 70, Colors.ORANGE_2, Colors.SALMON_2, scores)
-        # button("QUIT", 450, 500, 200, 70, Colors.ORANGE_2, Colors.YELLOW_2, quit)
+        button("MENU", 325, 550, 200, 70, Colors.ORANGE_2, Colors.SALMON_2, main)
+        button("QUIT", 575, 550, 200, 70, Colors.ORANGE_2, Colors.YELLOW_2, quit)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -361,7 +348,6 @@ def scores():
                     pygame.quit()
                     sys.exit()
             
-        
         pygame.display.update()
         clock.tick(Values.FPS)
 
@@ -401,7 +387,6 @@ def main():
                     pygame.quit()
                     sys.exit()
             
-        
         pygame.display.update()
         clock.tick(Values.FPS)
 
